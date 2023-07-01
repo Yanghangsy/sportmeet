@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: sportmeet
+    password: 123
+    url: jdbc:mysql://120.25.236.127:3306/sportmeet?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8
+    type: com.alibaba.druid.pool.DruidDataSource
+  mvc:
+    static-path-pattern: /**
+
+mybatis:
+  type-aliases-package: com.yang.pojo
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+server:
+  port: 8081

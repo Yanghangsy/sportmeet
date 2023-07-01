@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yang.mapper.ProjectMapper">
+    <insert id="addProject" parameterType="Project">
+        insert into project (tnum,pname,ptime,`space`,`count`)
+        values (#{teacher.tnum},#{pname},#{ptime},#{space},#{count});
+    </insert>
+    <delete id="deleteProject" >
+        delete from project where pnum=#{pnum};
+    </delete>
+    <update id="updateProject" parameterType="Project">
+        update project
+        <set>
+            <if test="teacher.tnum!=null and teacher.tnum!=''">
+                tnum=#{teacher.tnum},
+            </if>
+            <if test="pname!=null and pname!=''">
+                pname=#{pname},
+            </if>
+            <if test="ptime!=null and ptime!=''">
+                ptime=#{ptime},
+            </if>
+            <if test="space!=null and space!=''">
+                `space`=#{space},
+            </if>
+            <if test="count!=null and count!=''">
+                `count`=#{count},
+            </if>
+        </set>
+        where pnum=#{pnum} ;
+    </update>
+    <select id="queryProjectList" resultMap="query">
+      select pnum,p.tnum ptnum,pname,ptime,`space`,tname,tsex,email,pwd,perm,`count`
+      from project p ,teacher t where p.tnum=t.tnum  and pname like #{pname}
+      limit  #{pageNum},#{pageSize};
+    </select>
+    <resultMap id="query" type="Project">
+        <result property="pnum" column="pnum"/>
+        <result property="pname" column="pname"/>
+        <result property="ptime" column="ptime"/>
+        <result property="space" column="space"/>
+        <result property="count" column="count"/>
+        <association property="teacher" javaType="Teacher">
+            <result property="tnum" column="ptnum"/>
+            <result property="tname" column="tname"/>
+            <result property="tsex" column="tsex"/>
+            <result property="email" column="email"/>
+            <result property="pwd" column="pwd"/>
+            <result property="perm" column="perm"/>
+        </association>
+    </resultMap>
+
+    <select id="queryProjectById" resultMap="query">
+      select pnum,p.tnum ptnum,pname,ptime,`space`,tname,tsex,email,pwd,perm,`count`
+      from project p ,teacher t where p.tnum=t.tnum and pnum=#{pnum};
+    </select>
+
+    <select id="getTotal" resultType="java.lang.Long">
+        select count(*) from project
+    </select>
+</mapper>

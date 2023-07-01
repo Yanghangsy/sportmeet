@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yang.mapper.AthleteMapper">
+    <!--查找全部运动员信息-->
+    <select id="queryAthleteList" resultMap="query">
+        select  anum,a.gnum agnum,aname,age,sex,pwd,status,perm,leader,gname
+         from athlete a ,`group` g where g.gnum=a.gnum and aname like #{aname}
+         limit #{pageNum},#{pageSize}
+    </select>
+    <resultMap id="query" type="Athlete">
+        <result property="anum" column="anum"/>
+        <result property="aname" column="aname"/>
+        <result property="age" column="age"/>
+        <result property="sex" column="sex"/>
+        <result property="pwd" column="pwd"/>
+        <result property="perm" column="perm"/>
+        <result property="status" column="status"/>
+        <association property="group" javaType="Group">
+            <result property="gnum" column="agnum"/>
+            <result property="leader" column="leader"/>
+            <result property="gname" column="gname"/>
+        </association>
+    </resultMap>
+
+    <select id="queryStatusAthletes" resultMap="query">
+        select  anum,a.gnum agnum,aname,age,sex,pwd,status,perm,leader,gname
+         from athlete a ,`group` g where g.gnum=a.gnum and status=#{status}
+         limit #{pageNum},#{pageSize}
+    </select>
+
+    <!--根据id查找单个运动员信息-->
+    <select id="queryAthleteById" resultMap="query">
+        select  anum,a.gnum agnum,aname,age,sex,status,pwd,perm,leader,gname
+         from athlete a ,`group` g where g.gnum=a.gnum and anum=#{anum}
+    </select>
+    <select id="getTotal" resultType="java.lang.Long">
+        select count(*) from athlete
+        <where>
+            <if test="status!=null">
+                status=#{status}
+            </if>
+        </where>
+    </select>
+    <!--根据id删除运动员-->
+    <delete id="deleteAthlete" >
+        delete from athlete where anum=#{anum};
+    </delete>
+    
+    <!--增加一个运动员-->
+    <insert id="addAthlete" parameterType="Athlete" >
+        insert into athlete(anum, gnum, aname, age, sex)
+         VALUES(#{anum},#{group.gnum},#{aname},#{age},#{sex});
+    </insert>
+
+   <!--根据id更新一个运动员信息-->
+    <update id="updateAthlete" parameterType="Athlete">
+        update athlete
+        <set>
+            <if test="group.gnum!=null and group.gnum!=''">
+                gnum=#{group.gnum},
+            </if>
+            <if test="aname!=null and aname!=''">
+                aname=#{aname},
+            </if>
+            <if test="age!=null and age!=''">
+                age=#{age},
+            </if>
+            <if test="sex!=null and sex!=''">
+                sex=#{sex},
+            </if>
+            <if test="pwd!=null and pwd!=''">
+                pwd=#{pwd},
+            </if>
+            <if test="status!=null and status !=''">
+                status =#{status},
+            </if>
+        </set>
+        where anum=#{anum} ;
+    </update>
+
+
+
+</mapper>

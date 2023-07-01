@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yang.mapper.GroupMapper">
+    <insert id="addGroup" parameterType="Group">
+       insert into `group` (leader,gname) values (#{leader},#{gname});
+    </insert>
+    <delete id="deleteGroup" >
+        delete  from `group` where gnum=#{gnum};
+    </delete>
+    <update id="updateGroup" parameterType="Group">
+        update `group`
+        <set>
+            <if test="leader!=null and leader!=''">
+                leader=#{leader},
+            </if>
+            <if test="gname!=null and gname!=''">
+                gname=#{gname},
+            </if>
+        </set>
+         where gnum=#{gnum} ;
+    </update>
+    <select id="queryGroupById" resultType="Group">
+        select * from `group` where gnum=#{gnum};
+    </select>
+    <select id="queryGroupList" resultType="Group">
+        select * from `group`;
+    </select>
+</mapper>

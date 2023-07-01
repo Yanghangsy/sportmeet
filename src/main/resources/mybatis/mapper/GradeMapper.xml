@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yang.mapper.GradeMapper">
+    <insert id="addGrade" parameterType="Grade">
+        insert into `join` (pnum,anum) values (#{pnum},#{anum});
+    </insert>
+
+    <delete id="deleteGrade" >
+        delete from `join` where pnum=#{pnum} and anum=#{anum};
+    </delete>
+
+    <update id="updateGrade" parameterType="Grade">
+        update `join`
+        <set>
+            <if test="grade!=null">
+                grade=#{grade},
+            </if>
+            <if test="statu!=null">
+                statu=#{statu}
+            </if>
+        </set>
+         where pnum=#{pnum} and anum=#{anum};
+    </update>
+
+    <select id="queryGradeById" resultType="grade">
+        select
+         anum,pnum,grade,statu
+       from `join`
+        <where>
+            <if test="anum!=null">
+                and anum = #{anum}
+            </if>
+            <if test="pnum!=null">
+                and pnum = #{pnum}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="queryGradeList" resultType="grade">
+       select
+          *
+       from `join`
+    </select>
+
+    <select id="queryStatusAthlete" resultType="grade">
+        select
+          anum, pnum,grade,statu
+       from `join`
+          <where>
+              <if test="statu!=null">
+                  statu=#{statu}
+              </if>
+          </where>
+          limit #{pageNum},#{pageSize};
+    </select>
+
+    <select id="getTotal" resultType="java.lang.Long" >
+        select count(*) from `join` where statu=#{statu}
+    </select>
+
+
+</mapper>

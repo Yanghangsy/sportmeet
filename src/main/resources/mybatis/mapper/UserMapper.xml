@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yang.mapper.UserMapper">
+    <insert id="addUser" parameterType="User">
+        insert into user (userid,perm) values (#{userid},#{perm});
+    </insert>
+    <delete id="deleteUser">
+        delete from user where userid=#{userid}
+    </delete>
+
+    <update id="updateUserAndAthlete" parameterType="User">
+       update user u,athlete a set u.pwd =#{pwd},a.pwd=#{pwd}
+       where a.anum=u.userid and u.userid=#{userid}
+    </update>
+    <update id="updateUserAndTeacher" parameterType="User">
+       update user u,teacher t set u.pwd =#{pwd},t.pwd=#{pwd}
+       where a.anum=t.userid and u.userid=#{userid}
+    </update>
+    <select id="queryUserById" resultType="User">
+        select * from user where userid=#{userid}
+    </select>
+    <select id="queryUserList" resultType="User">
+        select * from user
+    </select>
+</mapper>
